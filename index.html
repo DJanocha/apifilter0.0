@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ApiDataFilter</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <form class="finder">
+      <input type="text" class="finder-input" />
+      <ul class="finder-list">
+        <li><span>city or state</span><span>population</span></li>
+        <li><span>type to search</span><span>or whatever</span></li>
+      </ul>
+    </form>
+    <script>
+      //handlers:
+      const finderListHandler = document.querySelector(".finder-list")
+      const ourInput = document.querySelector(".finder-input")
+
+      //somethings
+      const apiData = []
+      const apiURL = "https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json"
+
+      //fetchInitData
+      fetch(apiURL)
+        .then((response) => {
+          return response.json()
+        })
+        .then((data) => {
+          const stringColumns = []
+          Object.entries(data[0]).forEach(([key, value]) => {
+            if (typeof value === "string") stringColumns.push(key.split("_").slice(0, 1).join(""))
+          })
+          apiData.push(...data)
+        })
+        .catch((err) => console.log(err))
+
+      //functions:
+      const filterData = (e) => {
+        const filteredData = apiData.filter((elem) => {
+          return elem.city.toUpperCase().includes(e.target.value.toUpperCase()) || elem.state.toUpperCase().includes(e.target.value.toUpperCase())
+        })
+        finderListHandler.innerHTML = getListOfLI(filteredData, e.target.value)
+      }
+      const formatNumber = (number) => {
+        const stringNumber = "" + number
+        const charNumber = number.length
+        return Array.from(stringNumber)
+          .map((char, index, wholeString) => {
+            return (wholeString.length - index - 1) % 3 === 0 ? char + "." : char
+          })
+          .join("")
+          .slice(0, -1)
+      }
+      const getListOfLI = (mapOfItems, textToHighlight) => {
+        const regexHighlight = new RegExp(textToHighlight, "gi")
+
+        return mapOfItems
+          .map((elem) => {
+            const state = elem.state.replace(regexHighlight, `<span class="highlight">${textToHighlight}</span>`)
+            const city = elem.city.replace(regexHighlight, `<span class="highlight">${textToHighlight}</span>`)
+            return `<li>
+                  <span>
+                  ${city}, ${state}
+                  </span>
+                  <span>
+                  ${formatNumber(elem.population)}
+                  </span>
+                  </li>`
+          })
+          .join("")
+      }
+      //eventListeners:
+      ourInput.addEventListener("change", filterData)
+      ourInput.addEventListener("keyup", filterData)
+    </script>
+  </body>
+</html>

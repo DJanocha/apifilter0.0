@@ -1,0 +1,50 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  text-align: center;
+}
+:root {
+  --yellowcolor: rgba(255, 174, 0, 0.884);
+  background-color: var(--yellowcolor);
+  font-family: Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+.finder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+input.finder-input {
+  outline: 0;
+  border: 7px solid #cac7c7a9;
+  border-radius: 5%;
+  font-size: 2rem;
+  padding: 0.5rem;
+  margin-top: 2rem;
+}
+.finder > ul {
+  position: relative;
+  width: 15rem;
+  /* height: 2.5rem; */
+  margin-top: 0px;
+  display: flex;
+  flex-direction: column;
+}
+.finder > ul > li {
+  background-image: linear-gradient(rgba(224, 219, 219, 0.623), #ffff);
+  margin-left: -3.5rem;
+  width: 17rem;
+  padding: 0.5rem 0.5rem;
+  font-size: 0.8rem;
+  justify-content: space-between;
+  display: flex;
+}
+.finder > ul > li:nth-child(even) {
+  transform: perspective(100px) rotateX(-3deg);
+}
+.finder > ul > li:nth-child(odd) {
+  transform: perspective(100px) rotateX(3deg);
+}
+.highlight {
+  background-color: var(--yellowcolor);
+}
